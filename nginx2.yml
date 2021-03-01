@@ -10,42 +10,42 @@
       state: present
 
   - name: Install nginx
-  package:
-    name: nginx
-    state: present
+    package:
+      name: nginx
+      state: present
 
 
   - name: add index.html file
-  template:
-   src: ./index.html
-   dest: /var/www/html/index.html
+    template:
+     src: ./index.html
+     dest: /var/www/html/index.html
 
   - name: creating required directories
-  file:
-    path: /var/log/tdcustom
-    state: directory
-  file:
-    path: /var/log/tdcustom/accesslogs
-    state: directory
+    file:
+      path: /var/log/tdcustom
+      state: directory
+    file:
+      path: /var/log/tdcustom/accesslogs
+      state: directory
 
   - name: copy the nginx config file and restart nginx
-  copy:
-    src: ./nginx.cfg
-    dest: /etc/nginx/sites-available/nginx.cfg
-  become: yes
+    copy:
+      src: ./nginx.cfg
+      dest: /etc/nginx/sites-available/nginx.cfg
+    become: yes
 
   - name: create symlink
-  file:
-    src: /etc/nginx/sites-available/nginx.cfg
-    dest: /etc/nginx/sites-enabled/default
-    state: link
-  become: yes
+    file:
+      src: /etc/nginx/sites-available/nginx.cfg
+      dest: /etc/nginx/sites-enabled/default
+      state: link
+    become: yes
     
 
   - name: restart nginx
-  service:
-    name: nginx
-    state: restarted
+    service:
+      name: nginx
+      state: restarted
 
 # - name: Nginx listen on port 8900
 #   lineinfile: dest=/etc/nginx/sites-enabled/default regexp="^Listen 80 default server" line="Listen 8900 default server" state=present
