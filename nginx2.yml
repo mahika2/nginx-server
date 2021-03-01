@@ -17,7 +17,7 @@
 
   - name: add index.html file
   template:
-   src: /home/mahika/Documents/index.html
+   src: ./index.html
    dest: /var/www/html/index.html
 
   - name: creating required directories
@@ -30,7 +30,7 @@
 
   - name: copy the nginx config file and restart nginx
   copy:
-    src: /home/mahika/demo_ansible/nginx.cfg
+    src: ./nginx.cfg
     dest: /etc/nginx/sites-available/nginx.cfg
   become: yes
 
