@@ -1,0 +1,59 @@
+---
+# tasks file for nginxserver
+
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name:
+    pip:
+      name: boto3
+      state: present
+
+  - name: Install nginx
+  package:
+    name: nginx
+    state: present
+
+
+  - name: add index.html file
+  template:
+   src: /home/mahika/Documents/index.html
+   dest: /var/www/html/index.html
+
+  - name: creating required directories
+  file:
+    path: /var/log/tdcustom
+    state: directory
+  file:
+    path: /var/log/tdcustom/accesslogs
+    state: directory
+
+  - name: copy the nginx config file and restart nginx
+  copy:
+    src: /home/mahika/demo_ansible/nginx.cfg
+    dest: /etc/nginx/sites-available/nginx.cfg
+  become: yes
+
+  - name: create symlink
+  file:
+    src: /etc/nginx/sites-available/nginx.cfg
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+  become: yes
+    
+
+  - name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+
+# - name: Nginx listen on port 8900
+#   lineinfile: dest=/etc/nginx/sites-enabled/default regexp="^Listen 80 default server" line="Listen 8900 default server" state=present
+#   notify:
+#     - restart nginx
+
+# - name: Nginx listen on port 8900
+#   lineinfile: dest=/etc/nginx/sites-enabled/default regexp="^Listen [::]:80_default_server" line="Listen [::]:8900default server" state=present
+#   notify:
+#     - restart nginx
+
